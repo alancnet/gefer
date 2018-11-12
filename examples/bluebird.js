@@ -14,9 +14,11 @@ const printAll = async () => {
     }
 }
 
-printAll().catch(console.error)
+printAll().then(console.log).catch(console.error)
 
 mySubject.next('World')
+
+mySubject.return('Done')
 
 const deferred = defer()
 

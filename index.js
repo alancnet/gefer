@@ -31,24 +31,23 @@ const gefer = {
         let next = null
         const getNext = () => {
             if (queue.length) {
-                const last = queue.shift()
-                if (last.length === 1) return Promise.resolve(last[0])
-                else return Promise.reject(last[1])
+                return Promise.resolve(queue.shift())
             }
             const deferred = gefer.defer()
-            next = v => {
-                next = null
-                deferred.resolve(v)
-            }
+            next = last => deferred.resolve(last)
             return deferred.promise
         }
         const generator = async function*() {
             while (true) {
-                yield await getNext()
+                const last = await getNext()
+                if (last.length === 1) yield Promise.resolve(last[0])
+                else if (last.length === 2) throw last[1]
+                else return last[2]
             }
         }
         generator.next = (v) => next ? next(v) : enqueue([v])
         generator.error = (e) => next ? next(null, e) : enqueue([null, e])
+        generator.return = (r) => next ? next(null, null, r) : enqueue([null, null, r])
         return generator
     }
 }
