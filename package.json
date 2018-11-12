@@ -1,0 +1,17 @@
+{
+  "name": "gefer",
+  "version": "1.0.0",
+  "description": "Deferred promises and generators.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "bluebird": "^3.5.3"
+  },
+  "dependencies": {
+    "fifo": "^2.3.0"
+  }
+}
