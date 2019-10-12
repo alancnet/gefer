@@ -34,7 +34,10 @@ const gefer = {
                 return Promise.resolve(queue.shift())
             }
             const deferred = gefer.defer()
-            next = last => deferred.resolve(last)
+            next = last => {
+                next = null
+                deferred.resolve(last)
+            }
             return deferred.promise
         }
         const generator = async function*() {
@@ -45,9 +48,9 @@ const gefer = {
                 else return last[2]
             }
         }
-        generator.next = (v) => next ? next(v) : enqueue([v])
-        generator.error = (e) => next ? next(null, e) : enqueue([null, e])
-        generator.return = (r) => next ? next(null, null, r) : enqueue([null, null, r])
+        generator.next = (v) => next ? next([v]) : enqueue([v])
+        generator.error = (e) => next ? next([null, e]) : enqueue([null, e])
+        generator.return = (r) => next ? next([null, null, r]) : enqueue([null, null, r])
         return generator
     }
 }
